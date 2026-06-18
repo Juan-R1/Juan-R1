@@ -42,5 +42,8 @@ test("core happy path: language, bridges, plan, save", async ({ page }) => {
   await expect(page.getByText(/Saved/i).first()).toBeVisible();
 
   await page.goto("/saved-routes");
-  await expect(page.getByText("Downtown El Paso → UTEP")).toBeVisible();
+  const savedRoute = page
+    .getByRole("listitem")
+    .filter({ hasText: "Downtown El Paso → UTEP" });
+  await expect(savedRoute).toHaveCount(1);
 });
