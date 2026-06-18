@@ -1,0 +1,20 @@
+{
+  "name": "CruceEP — El Paso–Juárez mobility & border navigator",
+  "short_name": "CruceEP",
+  "description": "Plan El Paso and border trips in one place: bridge waits, transit, alerts, heat risk, and saved routes. Bilingual English/Spanish.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f7fafc",
+  "theme_color": "#0a7ea4",
+  "lang": "en",
+  "icons": [
+    {
+      "src": "/icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

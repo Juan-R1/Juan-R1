@@ -44,6 +44,14 @@ My projects are designed to show practical analyst skills for healthcare and ope
 
 I am positioning my portfolio for entry-to-mid healthcare analytics, healthcare operations, clinical research coordination, quality improvement, and business/data analyst roles. My goal is to combine hands-on healthcare experience with practical analytics skills that help teams understand data, improve workflows, and communicate insights clearly.
 
+## Featured Web App
+
+| Project | What it shows | Tools |
+| --- | --- | --- |
+| [**CruceEP**](./cruceep) — El Paso–Juárez mobility & border navigator | Full-stack, bilingual (EN/ES) web-first PWA that orchestrates bridge wait times, transit, alerts, heat risk, cooling centers, and saved routes — with strict source attribution and a provider/adapter architecture. | Next.js, TypeScript, Tailwind, Supabase (Postgres/Auth/RLS), Zod, Vitest, Playwright |
+
+See [`cruceep/README.md`](./cruceep/README.md) for setup, environment variables, Supabase migrations, tests, and deployment.
+
 ## Contact
 
 - GitHub: [@Juan-R1](https://github.com/Juan-R1)

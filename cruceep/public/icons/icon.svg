@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="CruceEP">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0a7ea4"/>
+      <stop offset="1" stop-color="#f97316"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="96" fill="url(#g)"/>
+  <!-- Stylized bridge spanning a border line -->
+  <g fill="none" stroke="#ffffff" stroke-width="20" stroke-linecap="round">
+    <path d="M64 320 H448"/>
+    <path d="M96 320 V232 a160 88 0 0 1 320 0 V320"/>
+    <path d="M176 320 V232 M256 320 V200 M336 320 V232"/>
+  </g>
+  <path d="M256 360 v96" stroke="#ffffff" stroke-width="14" stroke-dasharray="22 18" stroke-linecap="round"/>
+</svg>
