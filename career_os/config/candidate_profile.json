@@ -1,0 +1,84 @@
+{
+  "name": "Juan Ramirez",
+  "location": "El Paso, Texas",
+  "languages": ["English", "Spanish"],
+  "current_positioning": "Bilingual healthcare and behavioral health professional with practical analytics capability.",
+  "current_employer_context": "Emergence Health Network behavioral health, care coordination, community outreach, and transitional services.",
+  "salary_targets": {
+    "minimum_improvement": 50000,
+    "strong_target": 60000,
+    "ideal_next_level": 70000,
+    "unknown_salary_action": "Needs research"
+  },
+  "work_setup_preference": [
+    "Remote",
+    "Hybrid El Paso",
+    "On-site El Paso",
+    "Hybrid Texas",
+    "Remote US",
+    "Relocation only if clearly worthwhile"
+  ],
+  "education": [
+    "BA in Psychology",
+    "Biology minor",
+    "Spanish Biliterate Certificate"
+  ],
+  "certifications_training": [
+    "QMHP-CS active",
+    "CPR current and recertified in March",
+    "IRB Human Subjects Research completed",
+    "Google Data Analytics completed",
+    "Google Advanced Data Analytics in progress",
+    "Google Project Management in progress"
+  ],
+  "tools": [
+    "SQL",
+    "Python",
+    "pandas",
+    "Excel",
+    "Power BI",
+    "Tableau",
+    "R",
+    "SPSS",
+    "Jupyter Notebook",
+    "Git/GitHub",
+    "data cleaning",
+    "data visualization",
+    "reporting",
+    "dashboarding",
+    "baseline modeling",
+    "forecasting outputs",
+    "hypothesis testing basics"
+  ],
+  "resume_versions": {
+    "healthcare_data_analyst": "Juan_Ramirez_Healthcare_Data_Analyst_Resume.docx",
+    "clinical_research_coordinator": "Juan_Ramirez_Clinical_Research_Coordinator_Resume.docx",
+    "program_project_coordinator": "Juan_Ramirez_Program_Coordinator_Project_Coordinator_Resume.docx",
+    "healthcare_operations_qi": "Juan_Ramirez_Healthcare_Operations_QI_Resume.docx",
+    "case_management_behavioral_health": "Juan_Ramirez_Case_Management_Behavioral_Health_Leadership_Resume.docx",
+    "general_data_business_analyst": "Juan_Ramirez_General_Data_Business_Analyst_Resume.docx",
+    "it_helpdesk_analyst": "Juan_Ramirez_IT_Helpdesk_Analyst_Resume.docx",
+    "master": "Juan_Ramirez_Master_Resume_2026.docx"
+  },
+  "portfolio_projects": [
+    "healthcare-readmission-risk",
+    "cost-of-living-forecast-2025",
+    "divvy-2024-analysis",
+    "social_media_showdown",
+    "Juan-R1 profile README"
+  ],
+  "do_not_overposition_as": [
+    "Senior Data Scientist",
+    "Software Engineer",
+    "Machine Learning Engineer",
+    "Senior BI Architect",
+    "Epic-certified analyst unless actually certified",
+    "Licensed clinician",
+    "RN",
+    "Therapist",
+    "Medical provider",
+    "LPC",
+    "LCSW"
+  ]
+}
+

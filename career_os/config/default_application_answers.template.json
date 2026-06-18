@@ -1,0 +1,24 @@
+{
+  "candidate_name": "Juan Ramirez",
+  "primary_phone": "[PRIVATE]",
+  "date_of_birth": "[PRIVATE]",
+  "signature": "Juan Ramirez",
+  "initials": "J.R.",
+  "gender": "[PRIVATE]",
+  "race_ethnicity": "[PRIVATE]",
+  "born_as_us_citizen": "[PRIVATE]",
+  "veteran_status": "[PRIVATE]",
+  "disability_status": "[PRIVATE]",
+  "work_authorization": "[PRIVATE]",
+  "authorized_to_work_in_us": "[PRIVATE]",
+  "requires_visa_sponsorship": "[PRIVATE]",
+  "able_to_work_without_restrictions": "[PRIVATE]",
+  "background_check_consent": "[PRIVATE]",
+  "drug_test_consent": "[PRIVATE]",
+  "salary_minimum": 50000,
+  "salary_preferred": 60000,
+  "best_case": "70000+",
+  "desired_salary_text": "My target range is $60,000-$70,000+, depending on the role, benefits, work arrangement, growth opportunity, and total compensation package.",
+  "relocation_text": "Open to relocation only if the role, pay, benefits, career growth, and relocation package make it worthwhile."
+}
+

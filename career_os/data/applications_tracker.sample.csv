@@ -1,0 +1,3 @@
+job_id,date_added,company,job_title,salary_min,salary_max,location,work_setup,source_url,status,priority,fit_score,best_resume_version,tailored_resume,cover_letter,follow_up_date,interview_date,recruiter_hm,notes,next_action
+SAMPLE-001,2026-06-18,Example Health Plan,Healthcare Data Analyst,62000,72000,Remote US,Remote,https://example.com/job/healthcare-data-analyst,Ready to Apply,High,91,Healthcare Data Analyst Resume,Yes,Paragraph,,,"",Strong fit,Manual final review then submit
+

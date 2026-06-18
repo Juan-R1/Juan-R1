@@ -1,0 +1,16 @@
+{
+  "policy": "Use references only when specifically required or when the role is strong enough to justify it. Do not submit references for low-quality, suspicious, or weak jobs.",
+  "references": [
+    {
+      "name": "[PRIVATE]",
+      "relationship_or_title": "[PRIVATE]",
+      "phone": "[PRIVATE]"
+    },
+    {
+      "name": "[PRIVATE]",
+      "relationship_or_title": "[PRIVATE]",
+      "phone": "[PRIVATE]"
+    }
+  ]
+}
+

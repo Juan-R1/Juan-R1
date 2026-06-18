@@ -1,0 +1,54 @@
+{
+  "collection_policy": {
+    "preferred_methods": ["official APIs", "saved searches", "email alerts", "RSS", "manual review", "exported CSV", "copy-pasted job descriptions"],
+    "avoid": ["stealth scraping", "terms-of-service violations", "CAPTCHA bypass", "mass automated application submission"]
+  },
+  "first_queries": [
+    "Healthcare Business Analyst remote",
+    "Healthcare Data Analyst remote entry level",
+    "Quality Improvement Analyst healthcare remote",
+    "Clinical Research Coordinator remote",
+    "Clinical Research Coordinator El Paso",
+    "Program Coordinator behavioral health remote",
+    "Population Health Analyst remote",
+    "Care Coordination Analyst remote",
+    "Healthcare Operations Analyst Texas",
+    "Behavioral Health Program Specialist remote",
+    "Clinical Data Coordinator remote",
+    "Research Coordinator Texas",
+    "Utilization Management Coordinator remote",
+    "Data Coordinator healthcare remote",
+    "Reporting Analyst healthcare remote"
+  ],
+  "high_priority_company_sources": [
+    "UnitedHealth Group / Optum",
+    "CVS Health / Aetna",
+    "Centene",
+    "Molina Healthcare",
+    "Elevance Health",
+    "Humana",
+    "Cigna / Evernorth",
+    "Blue Cross Blue Shield organizations",
+    "IQVIA",
+    "Parexel",
+    "Thermo Fisher Scientific / PPD",
+    "Labcorp",
+    "Quest Diagnostics",
+    "ICON plc",
+    "Medpace",
+    "Syneos Health",
+    "Fortrea",
+    "UMC El Paso",
+    "Texas Tech Health El Paso",
+    "El Paso Children's Hospital",
+    "Texas HHSC"
+  ],
+  "token_saving_rules": [
+    "Deduplicate before scoring deeply.",
+    "Score title/company/location/salary first.",
+    "Generate full tailoring only for jobs scoring 75+.",
+    "Summarize skipped jobs in one line.",
+    "Batch jobs in groups of 10-25."
+  ]
+}
+

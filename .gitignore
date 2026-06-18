@@ -1,0 +1,10 @@
+career_os/private/
+career_os/data/applications_tracker.csv
+career_os/data/jobs_raw.csv
+career_os/data/jobs_scored.csv
+career_os/outputs/tailored_packets/
+career_os/queues/human_approval_needed.md
+career_os/queues/notifications_for_juan.md
+career_os/config/default_application_answers.private.json
+career_os/config/reference_contacts.private.json
+

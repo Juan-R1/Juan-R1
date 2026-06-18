@@ -1,0 +1,5 @@
+job_id,company,job_title,location,work_setup,salary_min,salary_max,score,decision,label,resume_version,github_project,human_approval_required,approval_reason,skip_reason
+SAMPLE-001,Example Health Plan,Healthcare Data Analyst,Remote US,Remote,62000,72000,91,Apply,Launch Role,Healthcare Data Analyst Resume,healthcare-readmission-risk,No,,
+SAMPLE-002,Example AI Lab,Senior Machine Learning Engineer,Remote US,Remote,120000,150000,36,Skip,Skip,Master Resume,Juan-R1 profile README,No,,Over-positioned senior ML/software role.
+SAMPLE-003,Community Health Org,Behavioral Health Program Coordinator,El Paso TX,Hybrid El Paso,52000,58000,79,Apply,Strong Bridge Role,Program / Project Coordinator Resume,Juan-R1 profile README,No,,
+

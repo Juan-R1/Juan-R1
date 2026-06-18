@@ -1,0 +1,3 @@
+job_id,date,company,contact_name,contact_role,channel,message_type,status,next_follow_up,notes
+SAMPLE-001,2026-06-18,Example Health Plan,,,LinkedIn,Recruiter intro,Drafted,2026-06-25,Send after application
+
