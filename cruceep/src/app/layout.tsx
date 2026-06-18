@@ -14,6 +14,13 @@ export const metadata: Metadata = {
     "Plan El Paso and border trips in one place: compare bridge wait times, check transit, see alerts and heat risk, and save your routes. Bilingual (English/Spanish).",
   manifest: "/manifest.webmanifest",
   applicationName: "CruceEP",
+  // Declaring icons (incl. apple-touch) stops browsers probing the default
+  // /apple-touch-icon*.png paths, which would otherwise 404 in the console.
+  icons: {
+    icon: [{ url: "/icons/icon.svg", type: "image/svg+xml" }],
+    shortcut: ["/icons/icon.svg"],
+    apple: [{ url: "/icons/icon.svg" }],
+  },
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
