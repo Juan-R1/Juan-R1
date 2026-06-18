@@ -10,7 +10,7 @@ export async function PATCH(request: Request) {
   return handleRoute(async () => {
     const user = await requireUser();
     const input = await parseBody(request, profileUpdateSchema);
-    const supabase = getSupabaseServerClient()!;
+    const supabase = (await getSupabaseServerClient())!;
 
     const patch: Record<string, unknown> = { updated_at: new Date().toISOString() };
     if (input.displayName !== undefined) patch.display_name = input.displayName;

@@ -10,7 +10,7 @@ export const dynamic = "force-dynamic";
 export async function GET() {
   return handleRoute(async () => {
     const user = await requireUser();
-    const supabase = getSupabaseServerClient()!;
+    const supabase = (await getSupabaseServerClient())!;
     const { data, error } = await supabase
       .from("saved_routes")
       .select("*")
@@ -27,7 +27,7 @@ export async function POST(request: Request) {
   return handleRoute(async () => {
     const user = await requireUser();
     const input = await parseBody(request, savedRouteInputSchema);
-    const supabase = getSupabaseServerClient()!;
+    const supabase = (await getSupabaseServerClient())!;
 
     const { data, error } = await supabase
       .from("saved_routes")

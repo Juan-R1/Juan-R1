@@ -9,12 +9,13 @@ export const dynamic = "force-dynamic";
 /** Update one of the signed-in user's saved routes. */
 export async function PATCH(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   return handleRoute(async () => {
+    const { id } = await params;
     const user = await requireUser();
     const input = await parseBody(request, savedRouteInputSchema.partial());
-    const supabase = getSupabaseServerClient()!;
+    const supabase = (await getSupabaseServerClient())!;
 
     const { data, error } = await supabase
       .from("saved_routes")
@@ -33,7 +34,7 @@ export async function PATCH(
           : {}),
         updated_at: new Date().toISOString(),
       })
-      .eq("id", params.id)
+      .eq("id", id)
       .eq("user_id", user.id)
       .select("*")
       .single();
@@ -47,19 +48,20 @@ export async function PATCH(
 /** Delete one of the signed-in user's saved routes. */
 export async function DELETE(
   _request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   return handleRoute(async () => {
+    const { id } = await params;
     const user = await requireUser();
-    const supabase = getSupabaseServerClient()!;
+    const supabase = (await getSupabaseServerClient())!;
 
     const { error } = await supabase
       .from("saved_routes")
       .delete()
-      .eq("id", params.id)
+      .eq("id", id)
       .eq("user_id", user.id);
 
     if (error) throw new ApiError("delete_failed", 500, error.message);
-    return jsonOk({ id: params.id });
+    return jsonOk({ id });
   });
 }

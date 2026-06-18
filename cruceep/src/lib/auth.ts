@@ -18,7 +18,7 @@ export interface CurrentUser {
  * when Supabase is not configured or no session exists. Never throws.
  */
 export async function getCurrentUser(): Promise<CurrentUser | null> {
-  const supabase = getSupabaseServerClient();
+  const supabase = await getSupabaseServerClient();
   if (!supabase) return null;
 
   const {

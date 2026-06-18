@@ -15,10 +15,12 @@ import {
 /**
  * Server Supabase client bound to the request cookies (for auth-aware reads and
  * RLS-protected writes). Returns null when Supabase is not configured.
+ *
+ * Async because Next.js 15 made `cookies()` asynchronous.
  */
-export function getSupabaseServerClient(): SupabaseClient | null {
+export async function getSupabaseServerClient(): Promise<SupabaseClient | null> {
   if (!isSupabaseConfigured()) return null;
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
 
   return createServerClient(getSupabaseUrl()!, getSupabaseAnonKey()!, {
     cookies: {

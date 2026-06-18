@@ -25,7 +25,7 @@ its **source**, a **"last updated" timestamp**, and a **confidence badge**
 - [Running the dev server](#running-the-dev-server)
 - [Running tests](#running-tests)
 - [Deploying to Vercel](#deploying-to-vercel)
-- [Replacing mock providers with live data](#replacing-mock-providers-with-live-data)
+- [Live & mock data providers](#live--mock-data-providers)
 - [Data-source attribution rules](#data-source-attribution-rules)
 - [Privacy approach](#privacy-approach)
 - [Accessibility](#accessibility)
@@ -59,7 +59,7 @@ accounts, synced saved routes, and the admin dashboard.
 
 | Layer | Choice |
 | --- | --- |
-| Framework | **Next.js 14** (App Router) + **TypeScript** |
+| Framework | **Next.js 15** (App Router) + **TypeScript** |
 | Styling | **Tailwind CSS** + a small shadcn-style component system (`src/components/ui`) |
 | Icons | lucide-react |
 | Validation | **Zod** (shared by API routes and forms) |
@@ -140,6 +140,27 @@ All are **optional**. See `.env.example` for the annotated template.
 4. Apply the schema and seed (next section).
 5. Email/password auth is on by default. For magic links, ensure email is
    enabled under Authentication → Providers.
+6. **Whitelist redirect URLs** (Authentication → URL Configuration):
+   add `https://your-domain/auth/callback` (and `http://localhost:3000/auth/callback`
+   for local dev) to *Redirect URLs*, and set the *Site URL*.
+
+### Production auth (how it works)
+
+CruceEP uses the Supabase **SSR** auth model:
+
+- **`src/middleware.ts`** refreshes the session on every request so SSR pages and
+  API routes always see a valid (non-expired) token. It no-ops when Supabase is
+  not configured.
+- **`src/app/auth/callback/route.ts`** completes magic-link and
+  email-confirmation sign-ins by exchanging the `?code=` for a session, then
+  redirects to a safe in-app page (`?next=`). This is why the redirect URL above
+  must be whitelisted.
+- If your project **requires email confirmation** (recommended for production),
+  sign-up shows a bilingual "check your email" message; the user is signed in
+  only after clicking the confirmation link, which lands on `/auth/callback`.
+- Roles: a user's `role` lives in `profiles` and is **operator-only** — it is
+  excluded from every user-writable schema and protected by RLS, so users cannot
+  self-promote. Grant admin via SQL (see below).
 
 ## Migrations & seed data
 
@@ -204,12 +225,33 @@ This app lives in the `cruceep/` subdirectory of the repo.
 2. **Set the project Root Directory to `cruceep`** (Project Settings → General).
 3. Framework preset: **Next.js** (auto-detected). Build: `npm run build`.
 4. Add the environment variables you use (at minimum the Supabase trio if you
-   want auth/DB). Mark `SUPABASE_SERVICE_ROLE_KEY` as a server-side secret.
+   want auth/DB; `WEATHER_PROVIDER=nws` for live weather). Mark
+   `SUPABASE_SERVICE_ROLE_KEY` as a server-side secret.
 5. Deploy. The app works on Vercel with zero env vars (mock mode) too.
+6. `vercel.json` (in `cruceep/`) pins the Next.js framework + build/install
+   commands; the Root Directory is still set in the dashboard (step 2).
 
-## Replacing mock providers with live data
+**Ops & security built in:**
+- Security headers on every route (CSP, HSTS in prod, `X-Frame-Options: DENY`,
+  `nosniff`, `Referrer-Policy`, `Permissions-Policy`) — see `next.config.mjs`.
+- Public **`/api/health`** endpoint (no secrets) for uptime monitors.
+- **`robots.txt`** + **`sitemap.xml`** (App Router metadata routes).
+- **CI**: `.github/workflows/ci.yml` runs typecheck + lint + tests + build on
+  push/PR (plus a non-blocking Playwright e2e job).
+- A non-fatal startup check logs a warning if `APP_ENV=production` but key
+  integrations are unset (app still degrades to mock).
 
-Each mock has a documented seam. To go live:
+## Live & mock data providers
+
+- **NWS weather — IMPLEMENTED & LIVE.** `NWSWeatherProvider`
+  (`src/lib/providers/weather.ts`) fetches the latest observation for an El Paso
+  station from the keyless `api.weather.gov` and flags heat advisories from
+  active NWS alerts. Enable it with **`WEATHER_PROVIDER=nws`** (set in
+  production). It requires a self-identifying `User-Agent` (`NWS_USER_AGENT`)
+  per NWS policy, uses a 5s timeout, and **falls back to the labeled mock** if
+  the API is ever unreachable — a failed fetch is never shown as "live".
+
+Each remaining mock has a documented seam to go live:
 
 - **CBP Border Wait Times** — implement `CBPBorderWaitProvider.getWaits()` in
   `src/lib/providers/border-wait.ts` (fetch `https://bwt.cbp.gov/`, map ports to
@@ -218,8 +260,6 @@ Each mock has a documented seam. To go live:
   `bridge_wait_snapshots` rather than fragile request-time scraping.
 - **Sun Metro / ETA GTFS** — implement `SunMetroGTFSProvider` / `ETAGTFSProvider`
   in `src/lib/providers/transit.ts`; set `TRANSIT_PROVIDER` accordingly.
-- **NWS weather** — implement `NWSWeatherProvider` (api.weather.gov) in
-  `src/lib/providers/weather.ts`; set `WEATHER_PROVIDER=nws`.
 - **Alerts** — implement `CompositeAlertProvider` to merge official feeds; or
   manage alerts via the admin dashboard (stored in Supabase, served Supabase-first).
 
@@ -255,18 +295,25 @@ aimed at WCAG AA contrast. Spanish strings are written to fit the same layouts.
 
 ## Known limitations
 
-- Bridge waits, transit routing, and weather use **mock providers** by default;
-  numbers are illustrative until live adapters are wired in.
+- **Weather is live** via NWS (`WEATHER_PROVIDER=nws`); bridge waits and transit
+  routing still use **mock providers** by default — numbers are illustrative
+  until those live adapters are wired in.
 - Trip routing is a **placeholder/beta** estimator, not a real routing engine.
 - Cooling-center sample records are **unverified**; verify before relying on them.
 - Maps are abstracted but the MVP ships **list-first** (no embedded map tiles yet).
 - Admin writes require the Supabase **service role key** to be configured.
+- The CSP currently allows `'unsafe-inline'` (required by Next.js inline runtime);
+  tightening to a nonce-based policy is on the roadmap.
+- `npm audit` shows 2 moderate findings in Next.js's **internally-bundled**
+  build-time PostCSS (untrusted-CSS-only; not reachable in this app) — not
+  fixable without an upstream Next.js release.
 
 ## Roadmap
 
 - Live **CBP Border Wait Times** integration + predictive wait estimates
 - **Sun Metro GTFS / GTFS-realtime** and **ETA GTFS** routing
-- **NWS** live weather + heat advisories
+- ~~**NWS** live weather + heat advisories~~ ✅ **shipped**
+- Nonce-based Content-Security-Policy
 - Push notifications (alerts, saved-route conditions)
 - Native mobile wrapper (Expo/Capacitor)
 - Parking (Park 915) and streetcar/event routing

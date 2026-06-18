@@ -18,7 +18,7 @@ export interface AlertsResult {
  * fall back to clearly-labeled mock data.
  */
 export async function getAlerts(): Promise<AlertsResult> {
-  const supabase = getSupabaseServerClient();
+  const supabase = await getSupabaseServerClient();
   if (supabase) {
     const { data, error } = await supabase
       .from("alerts")

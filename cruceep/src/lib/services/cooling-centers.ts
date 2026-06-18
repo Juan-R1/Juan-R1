@@ -15,7 +15,7 @@ export interface CoolingCentersResult {
  * mock fallback only when Supabase is unavailable or errors.
  */
 export async function getCoolingCenters(): Promise<CoolingCentersResult> {
-  const supabase = getSupabaseServerClient();
+  const supabase = await getSupabaseServerClient();
   if (supabase) {
     const { data, error } = await supabase
       .from("cooling_centers")

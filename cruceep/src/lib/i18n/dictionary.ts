@@ -215,6 +215,10 @@ export const dictionary = {
     "auth.signUp": "Sign up",
     "auth.magicLink": "Email me a magic link",
     "auth.magicLinkSent": "Check your email for a sign-in link.",
+    "auth.checkEmail":
+      "Almost there — check your email and click the confirmation link to finish creating your account.",
+    "auth.callbackError":
+      "That sign-in link was invalid or expired. Please request a new one.",
     "auth.toggleToSignUp": "Need an account? Sign up",
     "auth.toggleToSignIn": "Already have an account? Sign in",
     "auth.signOutSuccess": "You've been signed out.",
@@ -464,6 +468,10 @@ export const dictionary = {
     "auth.signUp": "Registrarse",
     "auth.magicLink": "Envíenme un enlace mágico",
     "auth.magicLinkSent": "Revisa tu correo para el enlace de acceso.",
+    "auth.checkEmail":
+      "Ya casi — revisa tu correo y haz clic en el enlace de confirmación para terminar de crear tu cuenta.",
+    "auth.callbackError":
+      "Ese enlace de acceso no era válido o expiró. Solicita uno nuevo.",
     "auth.toggleToSignUp": "¿Necesitas una cuenta? Regístrate",
     "auth.toggleToSignIn": "¿Ya tienes una cuenta? Inicia sesión",
     "auth.signOutSuccess": "Has cerrado sesión.",

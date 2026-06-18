@@ -6,8 +6,11 @@ import {
 } from "@/lib/providers/border-wait";
 import {
   MockWeatherProvider,
+  NWSWeatherProvider,
   heatCautionForTemp,
   createWeatherProvider,
+  parseNWSObservation,
+  hasHeatAdvisory,
 } from "@/lib/providers/weather";
 import { MockTransitProvider } from "@/lib/providers/transit";
 import { MockAlertProvider } from "@/lib/providers/alerts";
@@ -89,6 +92,90 @@ describe("MockWeatherProvider", () => {
 
   it("factory defaults to mock", () => {
     expect(createWeatherProvider(undefined).name).toBe("MockWeatherProvider");
+  });
+});
+
+describe("NWS weather parsing", () => {
+  it("parses temperature and heat index from an observation", () => {
+    const parsed = parseNWSObservation({
+      properties: {
+        temperature: { value: 40 }, // 40°C -> 104°F
+        heatIndex: { value: 43 }, // 43°C -> 109°F
+        textDescription: "Sunny",
+        timestamp: "2026-06-18T21:00:00+00:00",
+      },
+    });
+    expect(parsed).not.toBeNull();
+    expect(parsed!.temperatureF).toBe(104);
+    expect(parsed!.feelsLikeF).toBe(109);
+    expect(parsed!.conditions).toBe("Sunny");
+  });
+
+  it("falls back to temperature when heat index is missing", () => {
+    const parsed = parseNWSObservation({
+      properties: { temperature: { value: 20 }, heatIndex: { value: null } },
+    });
+    expect(parsed!.temperatureF).toBe(68);
+    expect(parsed!.feelsLikeF).toBe(68);
+  });
+
+  it("returns null for an unusable payload", () => {
+    expect(parseNWSObservation({})).toBeNull();
+    expect(parseNWSObservation({ properties: { temperature: { value: null } } })).toBeNull();
+  });
+
+  it("detects heat-related active alerts", () => {
+    expect(
+      hasHeatAdvisory({ features: [{ properties: { event: "Excessive Heat Warning" } }] })
+    ).toBe(true);
+    expect(
+      hasHeatAdvisory({ features: [{ properties: { event: "Flood Watch" } }] })
+    ).toBe(false);
+    expect(hasHeatAdvisory({})).toBe(false);
+  });
+});
+
+describe("NWSWeatherProvider (mocked fetch, no network)", () => {
+  it("returns a live snapshot from observation + alerts", async () => {
+    const fakeFetch = (async (url: string) => {
+      if (url.includes("/observations/latest")) {
+        return {
+          ok: true,
+          json: async () => ({
+            properties: {
+              temperature: { value: 41 },
+              heatIndex: { value: 44 },
+              textDescription: "Hot",
+              timestamp: "2026-06-18T21:00:00+00:00",
+            },
+          }),
+        } as Response;
+      }
+      return {
+        ok: true,
+        json: async () => ({
+          features: [{ properties: { event: "Heat Advisory" } }],
+        }),
+      } as Response;
+    }) as unknown as typeof fetch;
+
+    const provider = new NWSWeatherProvider("KELP", "31.7587,-106.4869", fakeFetch);
+    const snap = await provider.getCurrent();
+    expect(snap.attribution.confidence).toBe("live");
+    expect(snap.attribution.source).toBe("National Weather Service");
+    expect(snap.temperatureF).toBe(106);
+    expect(snap.advisory).toBe(true);
+    expect(snap.caution).toBe("extreme");
+  });
+
+  it("throws when the observation request fails (so callers fall back to mock)", async () => {
+    const failing = (async () => ({ ok: false, status: 503 }) as Response) as unknown as typeof fetch;
+    const provider = new NWSWeatherProvider("KELP", "31.7587,-106.4869", failing);
+    await expect(provider.getCurrent()).rejects.toThrow(/NWS observation/i);
+  });
+
+  it("factory selects NWS when requested", () => {
+    expect(createWeatherProvider("nws").name).toBe("NWSWeatherProvider");
   });
 });
 

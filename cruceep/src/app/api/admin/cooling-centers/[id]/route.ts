@@ -7,9 +7,10 @@ export const dynamic = "force-dynamic";
 
 export async function PATCH(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   return handleRoute(async () => {
+    const { id } = await params;
     await requireAdmin();
     const input = await parseBody(request, coolingCenterInputSchema.partial());
     const supabase = getAdminWriteClient();
@@ -33,7 +34,7 @@ export async function PATCH(
     const { data, error } = await supabase
       .from("cooling_centers")
       .update(patch)
-      .eq("id", params.id)
+      .eq("id", id)
       .select("*")
       .single();
 
@@ -45,16 +46,17 @@ export async function PATCH(
 
 export async function DELETE(
   _request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   return handleRoute(async () => {
+    const { id } = await params;
     await requireAdmin();
     const supabase = getAdminWriteClient();
     const { error } = await supabase
       .from("cooling_centers")
       .delete()
-      .eq("id", params.id);
+      .eq("id", id);
     if (error) throw new ApiError("delete_failed", 500, error.message);
-    return jsonOk({ id: params.id });
+    return jsonOk({ id });
   });
 }

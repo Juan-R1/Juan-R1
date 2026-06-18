@@ -1,3 +1,50 @@
+const isProd = process.env.NODE_ENV === "production";
+
+/**
+ * Content Security Policy.
+ *
+ * `'unsafe-inline'` is required for Next.js's hydration/runtime inline scripts
+ * and styled-jsx; `'unsafe-eval'` is only added in development (React Refresh).
+ * connect-src is widened to Supabase + the NWS API (the live weather source).
+ * Moving to a strict nonce-based policy is tracked in the roadmap.
+ */
+const csp = [
+  "default-src 'self'",
+  "base-uri 'self'",
+  "form-action 'self'",
+  "frame-ancestors 'none'",
+  "object-src 'none'",
+  "img-src 'self' data: https:",
+  "font-src 'self' data:",
+  `script-src 'self' 'unsafe-inline'${isProd ? "" : " 'unsafe-eval'"}`,
+  "style-src 'self' 'unsafe-inline'",
+  "connect-src 'self' https://*.supabase.co https://api.weather.gov",
+  "worker-src 'self'",
+  "manifest-src 'self'",
+  "upgrade-insecure-requests",
+].join("; ");
+
+/** Security headers applied to every route. */
+const securityHeaders = [
+  { key: "Content-Security-Policy", value: csp },
+  { key: "X-Content-Type-Options", value: "nosniff" },
+  { key: "X-Frame-Options", value: "DENY" },
+  { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+  {
+    key: "Permissions-Policy",
+    value: "camera=(), microphone=(), geolocation=(self), interest-cohort=()",
+  },
+  // HSTS only in production (https). Harmless to omit in local http dev.
+  ...(isProd
+    ? [
+        {
+          key: "Strict-Transport-Security",
+          value: "max-age=63072000; includeSubDomains; preload",
+        },
+      ]
+    : []),
+];
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
@@ -9,6 +56,11 @@ const nextConfig = {
   },
   async headers() {
     return [
+      {
+        // Apply security headers to all routes.
+        source: "/:path*",
+        headers: securityHeaders,
+      },
       {
         source: "/sw.js",
         headers: [

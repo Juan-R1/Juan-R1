@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { PageHeader } from "@/components/page-header";
 import { Button } from "@/components/ui/button";
@@ -26,6 +26,15 @@ export default function LoginPage() {
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
 
+  // Surface a failed auth callback (e.g. expired/invalid magic link). Read from
+  // the URL directly to avoid the useSearchParams() Suspense requirement.
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (new URLSearchParams(window.location.search).get("error") === "auth") {
+      setError(t("auth.callbackError"));
+    }
+  }, [t]);
+
   if (!isAuthEnabled) {
     return (
       <div>
@@ -38,6 +47,12 @@ export default function LoginPage() {
       </div>
     );
   }
+
+  // Where Supabase should send users after they click an email link.
+  const callbackUrl = () =>
+    typeof window !== "undefined"
+      ? `${window.location.origin}/auth/callback?next=/saved-routes`
+      : undefined;
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -52,13 +67,23 @@ export default function LoginPage() {
     }
     try {
       if (mode === "signUp") {
-        const { error } = await supabase.auth.signUp({
+        const { data, error } = await supabase.auth.signUp({
           email,
           password,
-          options: { data: { display_name: displayName } },
+          options: {
+            data: { display_name: displayName },
+            emailRedirectTo: callbackUrl(),
+          },
         });
         if (error) throw error;
-        setMessage(t("auth.success"));
+        if (data.session) {
+          // Email confirmation disabled on the project — already signed in.
+          router.push("/saved-routes");
+          router.refresh();
+          return;
+        }
+        // Confirmation required: the user must click the email link.
+        setMessage(t("auth.checkEmail"));
       } else {
         const { error } = await supabase.auth.signInWithPassword({
           email,
@@ -92,10 +117,7 @@ export default function LoginPage() {
     try {
       const { error } = await supabase.auth.signInWithOtp({
         email,
-        options: {
-          emailRedirectTo:
-            typeof window !== "undefined" ? window.location.origin : undefined,
-        },
+        options: { emailRedirectTo: callbackUrl() },
       });
       if (error) throw error;
       setMessage(t("auth.magicLinkSent"));
